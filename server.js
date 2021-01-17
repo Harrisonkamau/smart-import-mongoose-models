@@ -1,13 +1,15 @@
-const PORT = process.env.PORT || 4000;
-const { createApp } = require('./lib');
+const config = require('config');
+const { createApp, logger } = require('./lib');
+
+const PORT = config.get('port');
 
 async function main() {
   try {
     const app = await createApp();
 
-    app.listen(PORT, () => console.log(`Express server running on: http://localhost:${PORT}`));
+    app.listen(PORT, () => logger.info(`Express server running on: http://localhost:${PORT}`));
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     process.exit(1);
   }
 }

@@ -1,0 +1,31 @@
+{
+  "extends": "airbnb-base",
+  "env": {
+    "node": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2018
+  },
+  "plugins": [
+    "import"
+  ],
+  "rules": {
+    "object-curly-newline": "off",
+    "brace-style": [
+      "error",
+      "1tbs",
+      {
+        "allowSingleLine": false
+      }
+    ],
+    "consistent-return": "off",
+    "curly": [
+      "error",
+      "all"
+    ],
+    "max-len": ["off"],
+    "no-underscore-dangle": "off",
+    "no-warning-comments": "warn",
+    "operator-linebreak": ["error", "after", { "overrides": { "?": "before", ":": "before"} }]
+  }
+}

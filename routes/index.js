@@ -1,5 +1,5 @@
-const homeRoute = require('./home');
+const publicRoutes = require('./public');
 
-module.exports = [
-  homeRoute,
-];
+module.exports = {
+  publicRoutes,
+};
