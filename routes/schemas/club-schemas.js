@@ -21,6 +21,11 @@ const clubCreationSchema = Joi.object().keys({
   captain: Joi.string(),
 });
 
+const getClubSchema = Joi.object().keys({
+  slug: Joi.string().required().error(new JoiValidationError('Name/Slug is a required field')),
+});
+
 module.exports = {
   clubCreationSchema,
+  getClubSchema,
 };

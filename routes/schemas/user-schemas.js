@@ -41,8 +41,15 @@ const adminRoleSchema = Joi.object().keys({
     .error(new JoiValidationError('email is a required field')),
 });
 
+const getUserSchema = Joi.object().keys({
+  email: Joi.string().email()
+    .required()
+    .error(new JoiValidationError('email is a required field')),
+});
+
 module.exports = {
   userRegistrationSchema,
   userLoginSchema,
   adminRoleSchema,
+  getUserSchema,
 };

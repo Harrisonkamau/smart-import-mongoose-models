@@ -4,7 +4,8 @@ const { User } = require('../../models');
 const { AuthenticationError } = require('../../lib/errors');
 const logger = require('../../lib/logger');
 const { generateToken } = require('../../lib/auth');
-const { userSchemas: { userRegistrationSchema, userLoginSchema } } = require('../schemas');
+const { authenticateRequest } = require('../middleware');
+const { userSchemas: { userRegistrationSchema, userLoginSchema, getUserSchema } } = require('../schemas');
 
 const router = express.Router();
 
@@ -31,7 +32,7 @@ router.post('/users/register', celebrate({ body: userRegistrationSchema }), asyn
   }
 });
 
-router.get('/users', async (req, res) => {
+router.get('/users', authenticateRequest, async (req, res) => {
   try {
     const users = await User.find().exec();
 
@@ -43,6 +44,25 @@ router.get('/users', async (req, res) => {
     }
   } catch (error) {
     logger.error(`Could not retrieve users: ${error.message}`);
+    res.status(400).json({ error: error.message });
+  }
+});
+
+router.get('/users/:email', authenticateRequest, celebrate({ body: getUserSchema }), async (req, res) => {
+  try {
+    const { email } = req.params;
+    const existingUser = await User.findOne({ email });
+
+    if (!existingUser) {
+      res.status(404).json({
+        error: `User with email: ${email} not found`,
+      });
+    } else {
+      const sanitizedUser = User.sanitize(existingUser);
+      res.status(200).json(sanitizedUser);
+    }
+  } catch (error) {
+    logger.error(`Could not retrieve user by email: ${error.message}`);
     res.status(400).json({ error: error.message });
   }
 });

@@ -5,7 +5,7 @@ const { Club } = require('../../models');
 const { authenticateRequest, authorizeRequest } = require('../middleware');
 const logger = require('../../lib/logger');
 const {
-  clubSchemas: { clubCreationSchema },
+  clubSchemas: { clubCreationSchema, getClubSchema },
 } = require('../schemas');
 
 const router = express.Router();
@@ -40,7 +40,9 @@ router.post(
       const existingClub = await Club.findOne({ name: slug });
 
       if (existingClub) {
-        res.status(422).json({ error: `Club with name: ${club.name} already exists` });
+        res
+          .status(422)
+          .json({ error: `Club with name: ${club.name} already exists` });
       } else {
         const newClub = new Club(club);
         await newClub.save();
@@ -51,6 +53,30 @@ router.post(
     } catch (error) {
       logger.error(`error while creating a club: ${error.message}`);
       res.status(201).json({ error: error.message });
+    }
+  },
+);
+
+router.get(
+  '/clubs/:name',
+  authenticateRequest,
+  celebrate({ body: getClubSchema }),
+  async (req, res) => {
+    try {
+      const { name } = req.params;
+      const slug = slugify(name, slugifyOptions);
+      const existingClub = await Club.findOne({ name: slug }).exec();
+
+      if (!existingClub) {
+        res.status(404).json({
+          error: `Club with name: ${name} not found`,
+        });
+      } else {
+        res.status(200).json(existingClub);
+      }
+    } catch (error) {
+      logger.error(`Could not retrieve club error: ${error.message}`);
+      res.status(500).json({ error: error.message });
     }
   },
 );
