@@ -10,7 +10,6 @@ const { celebrate } = require('celebrate');
 const {
   userSchemas: { userRegistrationSchema, adminRoleSchema },
 } = require('../schemas');
-const { User } = require('../../models');
 const { authenticateRequest } = require('../middleware');
 const logger = require('../../lib/logger');
 
@@ -22,6 +21,7 @@ router.post(
   celebrate({ body: userRegistrationSchema }),
   async (req, res) => {
     try {
+      const { models: { User } } = req;
       const user = req.body;
       const existingUser = await User.findOne({ email: user.email });
 
@@ -54,6 +54,7 @@ router.post(
   celebrate({ body: adminRoleSchema }),
   async (req, res) => {
     try {
+      const { models: { User } } = req;
       const { email } = req.body;
       const existingUser = await User.findOne({ email });
 

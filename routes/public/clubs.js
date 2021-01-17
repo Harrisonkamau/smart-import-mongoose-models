@@ -1,7 +1,6 @@
 const express = require('express');
 const { celebrate } = require('celebrate');
 const slugify = require('slugify');
-const { Club } = require('../../models');
 const { authenticateRequest, authorizeRequest } = require('../middleware');
 const logger = require('../../lib/logger');
 const {
@@ -20,6 +19,7 @@ const slugifyOptions = {
 // Public Route to see all clubs - non-logged in users can still access this endpoint
 router.get('/clubs', async (req, res) => {
   try {
+    const { models: { Club } } = req;
     const clubs = await Club.find().exec();
     res.status(200).json(clubs);
   } catch (error) {
@@ -35,6 +35,7 @@ router.post(
   celebrate({ body: clubCreationSchema }),
   async (req, res) => {
     try {
+      const { models: { Club } } = req;
       const club = req.body;
       const slug = slugify(club.name, slugifyOptions);
       const existingClub = await Club.findOne({ name: slug });
@@ -63,6 +64,7 @@ router.get(
   celebrate({ body: getClubSchema }),
   async (req, res) => {
     try {
+      const { models: { Club } } = req;
       const { name } = req.params;
       const slug = slugify(name, slugifyOptions);
       const existingClub = await Club.findOne({ name: slug }).exec();

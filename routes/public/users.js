@@ -1,6 +1,5 @@
 const express = require('express');
 const { celebrate } = require('celebrate');
-const { User } = require('../../models');
 const { AuthenticationError } = require('../../lib/errors');
 const logger = require('../../lib/logger');
 const { generateToken } = require('../../lib/auth');
@@ -11,6 +10,7 @@ const router = express.Router();
 
 router.post('/users/register', celebrate({ body: userRegistrationSchema }), async (req, res) => {
   try {
+    const { models: { User } } = req;
     const user = req.body;
     const existingUser = await User.findOne({ email: user.email });
 
@@ -34,6 +34,7 @@ router.post('/users/register', celebrate({ body: userRegistrationSchema }), asyn
 
 router.get('/users', authenticateRequest, async (req, res) => {
   try {
+    const { models: { User } } = req;
     const users = await User.find().exec();
 
     if (users.length === 0) {
@@ -50,6 +51,7 @@ router.get('/users', authenticateRequest, async (req, res) => {
 
 router.get('/users/:email', authenticateRequest, celebrate({ body: getUserSchema }), async (req, res) => {
   try {
+    const { models: { User } } = req;
     const { email } = req.params;
     const existingUser = await User.findOne({ email });
 
@@ -69,6 +71,7 @@ router.get('/users/:email', authenticateRequest, celebrate({ body: getUserSchema
 
 router.post('/users/login', celebrate({ body: userLoginSchema }), async (req, res) => {
   try {
+    const { models: { User } } = req;
     const { email, password } = req.body;
     const existingUser = await User.findOne({ email });
     if (!existingUser) {
