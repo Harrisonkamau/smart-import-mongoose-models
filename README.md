@@ -1,5 +1,5 @@
 # Smart Auto Import your Mongoose Models
-This simple Node.js API demonstrates how easy it can be to import Mongoose models into your Routes without worrying about their place of definition within the code. The `main` branch contains the usual way of importing them while the `with-smart-import` branch demos how to import them smartly.
+This simple Node.js API demonstrates how easy it can be to import Mongoose models into your Routes without worrying about their place of definition within the code. The `main` branch contains the usual way of importing them while the [with-smart-import](https://github.com/Harrisonkamau/smart-import-mongoose-models/tree/with-smart-import) branch demos how to import them smartly.
 
 ## Prerequisites
 To better understand how this works, you're required to at least understand a basic flow of an API or any backend. Once you've cloned and installed on your local PC, fire up either [Postman](https://www.postman.com/) or [Insomnia](https://insomnia.rest/) to run the requests from there.
