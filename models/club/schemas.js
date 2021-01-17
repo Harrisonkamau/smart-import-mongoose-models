@@ -1,5 +1,4 @@
 const { Schema } = require('mongoose');
-const User = require('./user');
 
 const ClubSchema = new Schema({
   name: {
@@ -7,12 +6,13 @@ const ClubSchema = new Schema({
     required: true,
     index: true,
     unique: true,
+    lowercase: true,
   },
   stadium: String,
   foundedIn: String,
-  founders: [User],
-  coach: User,
-  captain: User,
+  founders: [{ type: String }],
+  coach: String,
+  captain: String,
 });
 
 module.exports = ClubSchema;

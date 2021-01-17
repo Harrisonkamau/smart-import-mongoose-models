@@ -15,4 +15,19 @@ module.exports = (userSchema) => {
     const data = _.pick(userDoc, fieldsToPick);
     return data;
   };
+
+  userSchema.statics.sanitizeAdmin = function sanitizeAdmin(userDoc) { // eslint-disable-line
+    const fieldsToPick = [
+      '_id',
+      'name',
+      'email',
+      'nationality',
+      'isRetired',
+      'age',
+      'role',
+    ];
+
+    const data = _.pick(userDoc, fieldsToPick);
+    return data;
+  };
 };
